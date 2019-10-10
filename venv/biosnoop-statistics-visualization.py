@@ -27,12 +27,12 @@ while (len(heatmap_time_values) < 100):
     heatmap_pid_values.append(polling_data_values[2])
     heatmap_bytes_values.append(polling_data_values[6])
     heatmap_latency_values.append(polling_data_values[7])
-
     # time.sleep(0.2)
 
 
 heatmap_x_values = heatmap_time_values
 heatmap_y_values = heatmap_latency_values
+# TODO: Parse bytes values into the buckets
 heatmap_z_values = heatmap_bytes_values
 
 hovertext = list()
@@ -52,6 +52,8 @@ io_pattern_heat_map = go.Figure(data=go.Heatmap(
 
 io_pattern_heat_map.update_layout(
     title='BIOSNOOP statistics',
-    xaxis_nticks=10)
+    xaxis_nticks=10,
+    xaxis_title="Time, s",
+    yaxis_title="Latency, ms")
 
 io_pattern_heat_map.show()
