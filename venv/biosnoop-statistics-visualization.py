@@ -14,7 +14,7 @@ heatmap_pid_values = []
 
 minimal_required_amount_of_data = 5
 # while biosnoop_process.poll() is None:
-while (len(heatmap_pid_values) < 100):
+while (len(heatmap_time_values) < 100):
     polling_result = biosnoop_process.stdout
     polling_data_values = polling_result.readline().decode("utf-8").split()
     if (len(polling_data_values) < minimal_required_amount_of_data):
@@ -23,36 +23,35 @@ while (len(heatmap_pid_values) < 100):
         continue
     # TODO: Replace hard-coded index with string pattern (?)
     heatmap_time_values.append(polling_data_values[0])
+    # print(polling_data_values)
     heatmap_pid_values.append(polling_data_values[2])
-    heatmap_bytes_values.append(polling_data_values[5])
-    heatmap_latency_values.append(polling_data_values[6])
+    heatmap_bytes_values.append(polling_data_values[6])
+    heatmap_latency_values.append(polling_data_values[7])
 
     # time.sleep(0.2)
 
-# heatmap_x_values = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday']
-# heatmap_y_values = ['Morning', 'Afternoon', 'Evening']
-# heatmap_z_values = [[1, 20, 30, 50, 1], [20, 1, 60, 80, 30], [300, 60, 1, -10, 20]]
 
-heatmap_z_values = [[i + random.random() for i in range(len(heatmap_time_values))] for ii in range(len(heatmap_pid_values))]
-
+heatmap_x_values = heatmap_time_values
+heatmap_y_values = heatmap_latency_values
+heatmap_z_values = heatmap_bytes_values
 
 hovertext = list()
-for yi, yy in enumerate(heatmap_pid_values):
+for yi, yy in enumerate(heatmap_y_values):
     hovertext.append(list())
-    for xi, xx in enumerate(heatmap_time_values):
-        hovertext[-1].append('Disk: {}<br />Time: {}<br />Latency: {}'.format(xx, yy, heatmap_z_values[yi][xi]))
+    for xi, xx in enumerate(heatmap_x_values):
+        hovertext[-1].append('Time: {}<br />Latency: {}<br />Bytes: test'.format(xx, yy))
+        # hovertext[-1].append('Time: {}<br />Latency: {}<br />Bytes: {}'.format(xx, yy, heatmap_bytes_values[yi][xi]))
 
 
-disk_number_mock = 1
 io_pattern_heat_map = go.Figure(data=go.Heatmap(
                    z=heatmap_z_values,
-                   x=heatmap_time_values,
-                   y=heatmap_pid_values,
+                   x=heatmap_x_values,
+                   y=heatmap_y_values,
                    hoverinfo='text',
                    text=hovertext))
 
 io_pattern_heat_map.update_layout(
     title='BIOSNOOP statistics',
-    xaxis_nticks=36)
+    xaxis_nticks=10)
 
 io_pattern_heat_map.show()
