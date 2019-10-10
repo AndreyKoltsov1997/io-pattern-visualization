@@ -4,7 +4,7 @@
 Visualizing the IO-related data via the Heat Map. What makes it unique is the additional info about the process that performs the IO operations. 
 
 ## Heatmap example 
-
+![](media/heatmap-example.png)<br/>
 ## Usage
 
 ```
