@@ -1,7 +1,9 @@
 import time
 import subprocess
 
-test_forever_output = subprocess.Popen(['./biosnoop-output-mock.sh'], shell=True, stdout=subprocess.PIPE)
+BIOSNOOP_MOCK_SCRIPT_NAME = "biosnoop-output-mock.sh"
+
+test_forever_output = subprocess.Popen(['./{biosnoop_mock}'.format(biosnoop_mock=BIOSNOOP_MOCK_SCRIPT_NAME)], shell=True, stdout=subprocess.PIPE)
 while test_forever_output.poll() is None:
     pollingResult = test_forever_output.stdout
     line = pollingResult.readline().decode("utf-8")
