@@ -14,7 +14,7 @@ while true
 do
   for i in $(seq 1 1 45)
   do
-    time=$((i*RANDOM))
+    time=$((i*3))
     echo $time
     processId=$i
     latency=$((RANDOM/i))

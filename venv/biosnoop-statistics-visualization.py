@@ -40,7 +40,7 @@ hovertext = list()
 for yi, yy in enumerate(heatmap_y_values):
     hovertext.append(list())
     for xi, xx in enumerate(heatmap_x_values):
-        hovertext[-1].append('Time: {}<br />Latency: {}<br />Bytes: {}'.format(xx, yy, heatmap_z_labels[0][yi]))
+        hovertext[-1].append('Time: {}<br />Latency: {}<br />Bytes: {} <br /> PID: {}'.format(xx, yy, heatmap_z_labels[0][yi], heatmap_pid_values[yi]))
 
 io_pattern_heat_map = go.Figure(data=go.Heatmap(
                    z=heatmap_z_values,
