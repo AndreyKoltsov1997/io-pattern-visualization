@@ -17,7 +17,9 @@ do
     echo $time
     processId=$i
     latency=$((RANDOM/i))
-    echo "${time}    supervise      ${processId}   xvda1   W 13092560   4096       ${latency}"
+    bytes=$((RANDOM*i*time))
+    sector=$((RANDOM*time*time*i))
+    echo "${time}    supervise      ${processId}   xvda1   W ${sector}   ${bytes}       ${latency}"
   done
 done
 
