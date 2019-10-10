@@ -1,7 +1,8 @@
 #!/bin/bash
 
 ## NOTE: This script was created to imitate BCC BIOSNOOP script output in ...
-## ... order to debug the parsing.
+## ... order to debug the parsing. It helps to prevent running BIOSNOOP on host since ...
+## ... BCC tools requires kernel headers mapping, that's not always possible.
 
 # NOTE: Generating random number for IO statistics imitating
 RANDOM=$$
