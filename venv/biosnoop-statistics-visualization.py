@@ -34,14 +34,13 @@ heatmap_x_values = heatmap_time_values
 heatmap_y_values = heatmap_latency_values
 # TODO: Parse bytes values into the buckets
 heatmap_z_values = heatmap_bytes_values
+heatmap_z_labels = [heatmap_bytes_values]
 
 hovertext = list()
 for yi, yy in enumerate(heatmap_y_values):
     hovertext.append(list())
     for xi, xx in enumerate(heatmap_x_values):
-        hovertext[-1].append('Time: {}<br />Latency: {}<br />Bytes: test'.format(xx, yy))
-        # hovertext[-1].append('Time: {}<br />Latency: {}<br />Bytes: {}'.format(xx, yy, heatmap_bytes_values[yi][xi]))
-
+        hovertext[-1].append('Time: {}<br />Latency: {}<br />Bytes: {}'.format(xx, yy, heatmap_z_labels[0][yi]))
 
 io_pattern_heat_map = go.Figure(data=go.Heatmap(
                    z=heatmap_z_values,
