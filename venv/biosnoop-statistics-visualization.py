@@ -5,11 +5,14 @@ import plotly.graph_objects as go ## Library for heat map
 BIOSNOOP_MOCK_SCRIPT_NAME = "biosnoop-output-mock.sh"
 
 biosnoop_process = subprocess.Popen(['./{biosnoop_mock}'.format(biosnoop_mock=BIOSNOOP_MOCK_SCRIPT_NAME)], shell=True, stdout=subprocess.PIPE)
-# while biosnoop_process.poll() is None:
-#     polling_result = biosnoop_process.stdout
-#     line = polling_result.readline().decode("utf-8")
-#     print(line)
-#     time.sleep(0.5)
+minimal_required_amount_of_data = 5
+while biosnoop_process.poll() is None:
+    polling_result = biosnoop_process.stdout
+    polling_data_values = polling_result.readline().decode("utf-8").split()
+    if (len(polling_data_values) < minimal_required_amount_of_data):
+        continue
+    print(polling_data_values)
+    time.sleep(0.5)
 
 heatmap_x_values = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday']
 heatmap_y_values = ['Morning', 'Afternoon', 'Evening']
