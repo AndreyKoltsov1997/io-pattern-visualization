@@ -1,15 +1,10 @@
-# import subprocess
-# subprocess.call(['chmod', '+x', 'test-forever-output.sh'])
-#
-# subprocess.call(['./test-forever-output.sh'], shell=True, stdout=subprocess.PIPE)
-
-import io
 import time
 import subprocess
-import sys
 
-process = subprocess.Popen(['./test-forever-output.sh'], shell=True, stdout=subprocess.PIPE)
-while process.poll() is None:
-    pollingResult = process.stdout
-    print(pollingResult)
+test_forever_output = subprocess.Popen(['./biosnoop-output-mock.sh'], shell=True, stdout=subprocess.PIPE)
+while test_forever_output.poll() is None:
+    pollingResult = test_forever_output.stdout
+    line = pollingResult.readline().decode("utf-8")
+    print(line)
     time.sleep(0.5)
+
