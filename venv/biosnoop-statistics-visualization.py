@@ -3,6 +3,14 @@ import subprocess
 import plotly.graph_objects as go ## Library for heat map
 import random
 
+# NOTE: Retrieving the info about the process
+PROCESS_NAME_MOCK = "postgres"
+ps_cmd_result = subprocess.run(['ps aux | grep {process_name}'.format(process_name=PROCESS_NAME_MOCK)], shell=True, stdout=subprocess.PIPE)
+ps_cmd_raw_result = ps_cmd_result.stdout.decode("utf-8").split()
+print("ps_cmd_values", ps_cmd_raw_result)
+
+exit(1) # TODO: Delete debug exit
+
 BIOSNOOP_MOCK_SCRIPT_NAME = "biosnoop-output-mock.sh"
 
 biosnoop_process = subprocess.Popen(['./{biosnoop_mock}'.format(biosnoop_mock=BIOSNOOP_MOCK_SCRIPT_NAME)], shell=True, stdout=subprocess.PIPE)
@@ -30,6 +38,7 @@ while (len(heatmap_time_values) < 100):
     # time.sleep(0.2)
 
 
+# NOTE: Creating the heat map
 heatmap_x_values = heatmap_time_values
 heatmap_y_values = heatmap_latency_values
 # TODO: Parse bytes values into the buckets
