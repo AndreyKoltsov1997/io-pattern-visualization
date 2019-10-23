@@ -62,8 +62,14 @@ heatmap_z_labels = [heatmap_bytes_values]
 hovertext = list()
 for yi, yy in enumerate(heatmap_y_values):
     hovertext.append(list())
+    # NOTE: Getting the process name by its ID
+    process_name_fetch_result_raw = subprocess.run(['ps -p {proc_id} -o comm='.format(proc_id=heatmap_pid_values[yi])], shell=True, stdout=subprocess.PIPE)
+    process_name_fetch_result = process_name_fetch_result_raw.stdout.decode("utf-8").split()
+    if (process_name_fetch_result == ""):
+        process_name_fetch_result = "unknown"
+
     for xi, xx in enumerate(heatmap_x_values):
-        hovertext[-1].append('Process name: {} <br />Time: {}<br />Latency: {}<br />Bytes: {} <br /> PID: {}, CPU: {} <br /> Virtual Memory Size: {} <br /> Resident Set Size: {}'.format(processName,xx, yy, heatmap_z_labels[0][yi], heatmap_pid_values[yi], cpu, virtualMemorySize, residentSetSize))
+        hovertext[-1].append('Process name: {} <br />Time: {}<br />Latency: {}<br />Bytes: {} <br /> PID: {}, CPU: {} <br /> Virtual Memory Size: {} <br /> Resident Set Size: {}'.format(process_name_fetch_result,xx, yy, heatmap_z_labels[0][yi], heatmap_pid_values[yi], cpu, virtualMemorySize, residentSetSize))
 
 io_pattern_heat_map = go.Figure(data=go.Heatmap(
                    z=heatmap_z_values,
