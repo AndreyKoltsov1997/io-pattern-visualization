@@ -1,10 +1,7 @@
-import time
 import subprocess
-import plotly.graph_objects as go ## Library for heat map
+## NOTE: Library for heat map generation
+import plotly.graph_objects as go
 import sys
-import random
-
-
 
 def visualize_io_pattern(bcc_tools_location, amount_of_logs_to_collect):
 
