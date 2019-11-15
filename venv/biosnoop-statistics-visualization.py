@@ -104,17 +104,15 @@ def visualize_io_pattern(bcc_tools_location, amount_of_logs_to_collect):
 
 
 def main(argv):
-    bcc_tools_script_location = ""
-    amount_of_logs_to_collect = 0
     try:
         bcc_tools_script_location = argv[1]
         amount_of_logs_to_collect = int(argv[2])
+        visualize_io_pattern(bcc_tools_script_location, amount_of_logs_to_collect)
     except Exception as error:
         print("Path to BCC tools hasn't been specified.")
         print("USE: $ python3 biosnoop-statistics-visualization.py <path_to_bcc_tools> <amount_of_metrics_to_collect>")
         sys.exit(-1)
 
-    visualize_io_pattern(bcc_tools_script_location, amount_of_logs_to_collect)
 
 if __name__ == '__main__':
     main(sys.argv)
