@@ -3,31 +3,33 @@ import subprocess
 import plotly.graph_objects as go
 import sys
 
-def visualize_io_pattern(bcc_tools_location, amount_of_logs_to_collect):
+def visualize_io_pattern(amount_of_logs_to_collect):
 
-    biosnoop_process = subprocess.Popen(['python {biosnoop_script_location}'.format(biosnoop_script_location=bcc_tools_location)],
-                                        shell=True, stdout=subprocess.PIPE)
     # NOTE: Heatmap's data
     heatmap_time_values = []
     heatmap_latency_values = []
     heatmap_bytes_values = []
     heatmap_pid_values = []
 
-    minimal_required_amount_of_data = 5
+    minimal_required_amount_of_data = 7
     # while biosnoop_process.poll() is None:
     TIME_VALUE_INDEX = 0
     PID_VALUE_INDEX = 2
     BYTES_VALUE_INDEX = 6
     LATENCY_VAUE_INDEX = 7
 
-    while (len(heatmap_time_values) < amount_of_logs_to_collect):
-        polling_result = biosnoop_process.stdout
+    IOSNOOP_LOG_FILE_NAME_MOCK = "iosnoop_logs.dat"
+    iosnoop_logs_file = open(IOSNOOP_LOG_FILE_NAME_MOCK)
+    lines = []
+    current_line = iosnoop_logs_file.readline()
 
-        polling_data_values = polling_result.readline().decode("utf-8").split()
+    while (current_line):
+        polling_data_values = current_line.split()
 
         if (len(polling_data_values) < minimal_required_amount_of_data):
             # NOTE: Preventing parsing a single PID (sometimes, the polling ...
             # ... captures this kind of output.
+            current_line = iosnoop_logs_file.readline()
             continue
         # TODO: Replace hard-coded index with string pattern (?)
 
@@ -36,6 +38,7 @@ def visualize_io_pattern(bcc_tools_location, amount_of_logs_to_collect):
         heatmap_bytes_values.append(polling_data_values[BYTES_VALUE_INDEX])
         heatmap_latency_values.append(polling_data_values[LATENCY_VAUE_INDEX])
         # time.sleep(0.2)
+        current_line =  iosnoop_logs_file.readline()
 
     # NOTE: Creating the heat map
     heatmap_x_values = heatmap_time_values
@@ -114,23 +117,11 @@ def visualize_io_pattern(bcc_tools_location, amount_of_logs_to_collect):
     io_pattern_heat_map.show()
 
 
-
 def main(argv):
-    try:
-        LOGS_FILE_SOURCE_FILE_MOCK = "iosnoop_logs.dat"
-        iosnoop_logs_file = open(LOGS_FILE_SOURCE_FILE_MOCK, "r")
-        should_continue_reading_file = True
-        while (True):
-            current_line = iosnoop_logs_file.readline()
-            should_continue_reading_file = (current_line)
-            print(f'current_line: {current_line}')
-        # bcc_tools_script_location = argv[1]
-        # amount_of_logs_to_collect = int(argv[2])
-        # visualize_io_pattern(bcc_tools_script_location, amount_of_logs_to_collect)
-    except Exception as error:
-        print("Path to BCC tools hasn't been specified.")
-        print("USE: $ python3 biosnoop-statistics-visualization.py <path_to_bcc_tools> <amount_of_metrics_to_collect>")
-        sys.exit(-1)
+    visualize_io_pattern(5)
+
+
+
 
 
 if __name__ == '__main__':
