@@ -5,7 +5,7 @@ import sys
 
 def visualize_io_pattern(bcc_tools_location, amount_of_logs_to_collect):
 
-    biosnoop_process = subprocess.Popen(['./{biosnoop_script_location}'.format(biosnoop_script_location=bcc_tools_location)],
+    biosnoop_process = subprocess.Popen(['python {biosnoop_script_location}'.format(biosnoop_script_location=bcc_tools_location)],
                                         shell=True, stdout=subprocess.PIPE)
     # NOTE: Heatmap's data
     heatmap_time_values = []
@@ -111,7 +111,7 @@ def main(argv):
         amount_of_logs_to_collect = int(argv[2])
     except Exception as error:
         print("Path to BCC tools hasn't been specified.")
-        print("USE: $ python3 ./biosnoop-statistics-visualization.py <path_to_bcc_tools> <amount_of_metrics_to_collect>")
+        print("USE: $ python3 biosnoop-statistics-visualization.py <path_to_bcc_tools> <amount_of_metrics_to_collect>")
         sys.exit(-1)
 
     visualize_io_pattern(bcc_tools_script_location, amount_of_logs_to_collect)
