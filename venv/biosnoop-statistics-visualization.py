@@ -117,9 +117,16 @@ def visualize_io_pattern(bcc_tools_location, amount_of_logs_to_collect):
 
 def main(argv):
     try:
-        bcc_tools_script_location = argv[1]
-        amount_of_logs_to_collect = int(argv[2])
-        visualize_io_pattern(bcc_tools_script_location, amount_of_logs_to_collect)
+        LOGS_FILE_SOURCE_FILE_MOCK = "iosnoop_logs.dat"
+        iosnoop_logs_file = open(LOGS_FILE_SOURCE_FILE_MOCK, "r")
+        should_continue_reading_file = True
+        while (True):
+            current_line = iosnoop_logs_file.readline()
+            should_continue_reading_file = (current_line)
+            print(f'current_line: {current_line}')
+        # bcc_tools_script_location = argv[1]
+        # amount_of_logs_to_collect = int(argv[2])
+        # visualize_io_pattern(bcc_tools_script_location, amount_of_logs_to_collect)
     except Exception as error:
         print("Path to BCC tools hasn't been specified.")
         print("USE: $ python3 biosnoop-statistics-visualization.py <path_to_bcc_tools> <amount_of_metrics_to_collect>")
