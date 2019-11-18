@@ -11,6 +11,13 @@ from utils.math_utils import *
 sys.path.append(os.pardir)
 sys.path.append(".")
 
+def get_heatmap_figure(x_value, y_values, z_values):
+    figure_heatmap = go.Figure(data=go.Heatmap(
+        z=z_values,
+        x=x_value,
+        y=y_values))
+    return figure_heatmap
+
 def visualize_io_pattern(source_file_name):
 
     # NOTE: Heatmap's data
@@ -52,38 +59,32 @@ def visualize_io_pattern(source_file_name):
     heatmap_z_labels = [heatmap_bytes_values]
 
     hovertext = list()
-    # for yi, yy in enumerate(heatmap_y_values):
-    #     hovertext.append(list())
-    #     # NOTE: Getting the process name by its ID
-    #     print(f"heatmap_pid_values[yi]: {heatmap_pid_values[yi]}")
-    #     cpu = "unknown"
-    #     virtualMemorySize = "unknown"
-    #     ps_cmd_raw_result = []
-    #     target_process_name = "unknown"
-    #
-    #     # for xi, xx in enumerate(heatmap_x_values):
-        #     hovertext[-1].append(
-        #         'Process name: {} <br />Time: {}<br />Latency: {}<br />Bytes: {} <br /> PID: {}, CPU: {} <br /> Virtual Memory Size: {} <br /> Resident Set Size: {}'.format(
-        #             target_process_name, xx, yy, heatmap_z_labels[0][yi], heatmap_pid_values[yi], "unknown",
-        #             "unknown", "unknown"))
     print("Launch map drawing..")
-    io_pattern_heat_map = go.Figure(data=go.Heatmap(
-        z=heatmap_z_values,
-        x=heatmap_x_values,
-        y=heatmap_y_values,
-        hoverinfo='text',
-        text=hovertext))
-
-    io_pattern_heat_map.update_layout(
-        title='BIOSNOOP statistics',
+    # io_pattern_heat_map = go.Figure(data=go.Heatmap(
+    #     z=heatmap_z_values,
+    #     x=heatmap_x_values,
+    #     y=heatmap_y_values,
+    #     hoverinfo='text',
+    #     text=hovertext))
+    latency_heatmap = get_heatmap_figure(heatmap_x_values, heatmap_y_values, heatmap_z_values)
+    latency_heatmap.update_layout(
+        title='iosnoop statistics',
         # xaxis_nticks=10,
         xaxis_title="Time, s",
         yaxis_title="Latency, ms")
 
+    bytes_heatmap = get_heatmap_figure(heatmap_x_values, heatmap_z_values, heatmap_y_values)
+    bytes_heatmap.update_layout(
+        title='iosnoop statistics',
+        # xaxis_nticks=10,
+        xaxis_title="Time, s",
+        yaxis_title="Bytes")
+
+
     print("Exporting heatmap into file..")
     try:
-        io_pattern_heat_map.write_image("another_heatmap.png")
-        print("Executing heatmap pop up..")
+        latency_heatmap.write_image("latency_heatmap.png")
+        bytes_heatmap.write_image("bytes_heatmap.png")
     except Exception as e:
         print(e)
         sys.exit(-1)
