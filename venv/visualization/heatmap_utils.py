@@ -69,22 +69,25 @@ def visualize_io_pattern(source_file_name):
     latency_heatmap = get_heatmap_figure(heatmap_x_values, heatmap_y_values, heatmap_z_values)
     latency_heatmap.update_layout(
         title='iosnoop statistics',
-        # xaxis_nticks=10,
+        yaxis_nticks=40,
         xaxis_title="Time, s",
         yaxis_title="Latency, ms")
 
     bytes_heatmap = get_heatmap_figure(heatmap_x_values, heatmap_z_values, heatmap_y_values)
     bytes_heatmap.update_layout(
         title='iosnoop statistics',
-        # xaxis_nticks=10,
         xaxis_title="Time, s",
+        xaxis_nticks=40,
         yaxis_title="Bytes")
 
 
     print("Exporting heatmap into file..")
     try:
-        latency_heatmap.write_image("latency_heatmap.png")
-        bytes_heatmap.write_image("bytes_heatmap.png")
+        latency_heatmap.write_html(file="latency_heatmap.html", auto_open=False)
+        bytes_heatmap.write_html(file="bytes_heatmap.html", auto_open=False)
+
+        # latency_heatmap.write_image("latency_heatmap.svg")
+        # bytes_heatmap.write_image("bytes_heatmap.svg")
     except Exception as e:
         print(e)
         sys.exit(-1)
