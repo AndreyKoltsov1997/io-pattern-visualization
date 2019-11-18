@@ -3,7 +3,7 @@ import subprocess
 import plotly.graph_objects as go
 import sys
 
-def visualize_io_pattern(amount_of_logs_to_collect):
+def visualize_io_pattern(amount_of_logs_to_collect, source_file_name):
 
     # NOTE: Heatmap's data
     heatmap_time_values = []
@@ -18,7 +18,7 @@ def visualize_io_pattern(amount_of_logs_to_collect):
     BYTES_VALUE_INDEX = 6
     LATENCY_VAUE_INDEX = 7
 
-    IOSNOOP_LOG_FILE_NAME_MOCK = "iosnoop_logs.dat"
+    IOSNOOP_LOG_FILE_NAME_MOCK = source_file_name
     iosnoop_logs_file = open(IOSNOOP_LOG_FILE_NAME_MOCK)
     lines = []
     current_line = iosnoop_logs_file.readline()
@@ -118,11 +118,9 @@ def visualize_io_pattern(amount_of_logs_to_collect):
 
 
 def main(argv):
-    visualize_io_pattern(5)
-
-
-
-
+    amount_of_logs_to_analyze = int(argv[1])
+    source_file_name = argv[2]
+    visualize_io_pattern(amount_of_logs_to_analyze, source_file_name)
 
 if __name__ == '__main__':
     main(sys.argv)
