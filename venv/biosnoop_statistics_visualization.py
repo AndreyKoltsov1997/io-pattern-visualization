@@ -178,4 +178,17 @@ def main(argv):
 if __name__ == '__main__':
 
     available_options = get_available_options()
+    try:
+        if available_options.filepath:
+            logs_file_path = available_options.filepath[0]
+            visualize_io_pattern(logs_file_path)
+        elif available_options.execute:
+            iosnoop_script_path = available_options.execute[0]
+            required_amount_of_logs_to_capture = available_options.execute[1]
+            ## TODO: Call the capturing here.
+    except Exception as error:
+        print(f"Unable to parse given arguments. Details: {error}")
+        sys.exit(-1)
+    finally:
+        sys.exit()
     main(sys.argv)
