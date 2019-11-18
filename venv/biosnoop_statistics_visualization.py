@@ -4,12 +4,21 @@
 import subprocess
 ## NOTE: Library for heat map generation
 import plotly.graph_objects as go
-import sys, os
+import sys, os, argparse
 
 sys.path.append(os.pardir)
 sys.path.append(".")
 
 from utils.constants import *
+
+def get_available_options() -> argparse.Namespace:
+    parser_instance = argparse.ArgumentParser(description="Vizualising IO pattern using data gathered via BCC tools.")
+    parser_instance.add_argument('-f',  '--filepath', action='store_true', help="Path to file that contains logs gathered via '$ ./iosnoop -s' execution.")
+    parser_instance.add_argument('-e', '--execute', action="store", metavar=('PATH', 'AMOUNT'), nargs=2,
+                                 help="vizualise certain amount of iosnoop's output logs.")
+    general_group = parser_instance.add_argument_group()
+
+    return parser_instance.parse_args()
 
 def visualize_io_pattern(source_file_name):
 
@@ -167,4 +176,6 @@ def main(argv):
     visualize_io_pattern(source_file_name)
 
 if __name__ == '__main__':
+
+    available_options = get_available_options()
     main(sys.argv)
