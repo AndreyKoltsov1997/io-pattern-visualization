@@ -13,11 +13,22 @@ sys.path.append(os.pardir)
 sys.path.append(".")
 
 def get_heatmap_figure(x_value, y_values, z_values):
+    hovertext = get_hover_text_labels(x_value, y_values)
     figure_heatmap = go.Figure(data=go.Heatmap(
         z=z_values,
         x=x_value,
-        y=y_values))
+        y=y_values,
+        text=hovertext))
     return figure_heatmap
+
+def get_hover_text_labels(x_values, y_values):
+    hovertext = list()
+    for yi, yy in enumerate(y_values):
+        hovertext.append(list())
+        for xi, xx in enumerate(x_values):
+            hovertext[-1].append('Process name: test')
+    return hovertext
+
 
 def visualize_io_pattern(source_file_name, logs_kind):
     # NOTE: Heatmap's data
@@ -58,14 +69,6 @@ def visualize_io_pattern(source_file_name, logs_kind):
     heatmap_z_values = heatmap_bytes_values
     heatmap_z_labels = [heatmap_bytes_values]
 
-    hovertext = list()
-    print("Launch map drawing..")
-    # io_pattern_heat_map = go.Figure(data=go.Heatmap(
-    #     z=heatmap_z_values,
-    #     x=heatmap_x_values,
-    #     y=heatmap_y_values,
-    #     hoverinfo='text',
-    #     text=hovertext))
 
 
     latency_heatmap = get_heatmap_figure(heatmap_x_values, heatmap_y_values, heatmap_z_values)
