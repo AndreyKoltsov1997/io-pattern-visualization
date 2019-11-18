@@ -13,7 +13,7 @@ from utils.constants import *
 
 def get_available_options() -> argparse.Namespace:
     parser_instance = argparse.ArgumentParser(description="Vizualising IO pattern using data gathered via BCC tools.")
-    parser_instance.add_argument('-f',  '--filepath', action='store_true', help="Path to file that contains logs gathered via '$ ./iosnoop -s' execution.")
+    parser_instance.add_argument('-f',  '--filepath', action='store', metavar=('FILEPATH'), nargs=1, help="Path to file that contains logs gathered via '$ ./iosnoop -s' execution.")
     parser_instance.add_argument('-e', '--execute', action="store", metavar=('PATH', 'AMOUNT'), nargs=2,
                                  help="vizualise certain amount of iosnoop's output logs.")
     general_group = parser_instance.add_argument_group()
@@ -200,12 +200,7 @@ def visualize_io_pattern_with_captured_values(bcc_tools_location, amount_of_logs
     io_pattern_heat_map.show()
 
 
-def main(argv):
-    source_file_name = argv[1]
-    visualize_io_pattern(source_file_name)
-
 if __name__ == '__main__':
-
     available_options = get_available_options()
     try:
         if available_options.filepath:
@@ -221,4 +216,3 @@ if __name__ == '__main__':
         sys.exit(-1)
     finally:
         sys.exit()
-    main(sys.argv)
