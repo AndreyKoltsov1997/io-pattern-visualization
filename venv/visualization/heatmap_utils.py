@@ -48,25 +48,24 @@ def visualize_io_pattern(source_file_name):
     # NOTE: Creating the heat map
     heatmap_x_values = heatmap_time_values
     heatmap_y_values = heatmap_latency_values
-    # TODO: Parse bytes values into the buckets
     heatmap_z_values = heatmap_bytes_values
     heatmap_z_labels = [heatmap_bytes_values]
 
     hovertext = list()
-    for yi, yy in enumerate(heatmap_y_values):
-        hovertext.append(list())
-        # NOTE: Getting the process name by its ID
-        print(f"heatmap_pid_values[yi]: {heatmap_pid_values[yi]}")
-        cpu = "unknown"
-        virtualMemorySize = "unknown"
-        ps_cmd_raw_result = []
-        target_process_name = "unknown"
-
-        for xi, xx in enumerate(heatmap_x_values):
-            hovertext[-1].append(
-                'Process name: {} <br />Time: {}<br />Latency: {}<br />Bytes: {} <br /> PID: {}, CPU: {} <br /> Virtual Memory Size: {} <br /> Resident Set Size: {}'.format(
-                    target_process_name, xx, yy, heatmap_z_labels[0][yi], heatmap_pid_values[yi], "unknown",
-                    "unknown", "unknown"))
+    # for yi, yy in enumerate(heatmap_y_values):
+    #     hovertext.append(list())
+    #     # NOTE: Getting the process name by its ID
+    #     print(f"heatmap_pid_values[yi]: {heatmap_pid_values[yi]}")
+    #     cpu = "unknown"
+    #     virtualMemorySize = "unknown"
+    #     ps_cmd_raw_result = []
+    #     target_process_name = "unknown"
+    #
+    #     # for xi, xx in enumerate(heatmap_x_values):
+        #     hovertext[-1].append(
+        #         'Process name: {} <br />Time: {}<br />Latency: {}<br />Bytes: {} <br /> PID: {}, CPU: {} <br /> Virtual Memory Size: {} <br /> Resident Set Size: {}'.format(
+        #             target_process_name, xx, yy, heatmap_z_labels[0][yi], heatmap_pid_values[yi], "unknown",
+        #             "unknown", "unknown"))
     print("Launch map drawing..")
     io_pattern_heat_map = go.Figure(data=go.Heatmap(
         z=heatmap_z_values,
@@ -82,9 +81,13 @@ def visualize_io_pattern(source_file_name):
         yaxis_title="Latency, ms")
 
     print("Exporting heatmap into file..")
-    io_pattern_heat_map.write_image("test_heatmap.png")
-    print("Executing heatmap pop up..")
-    io_pattern_heat_map.show()
+    try:
+        io_pattern_heat_map.write_image("another_heatmap.png")
+        print("Executing heatmap pop up..")
+    except Exception as e:
+        print(e)
+        sys.exit(-1)
+
 
 
 def visualize_io_pattern_with_captured_values(bcc_tools_location, amount_of_logs_to_collect):
