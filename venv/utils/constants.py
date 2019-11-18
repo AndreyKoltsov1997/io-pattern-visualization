@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 
 import sys, os
+from utils.constants import *
 
 sys.path.append(os.pardir)
 sys.path.append(".")
