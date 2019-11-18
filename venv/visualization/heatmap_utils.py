@@ -20,9 +20,6 @@ def get_heatmap_figure(x_value, y_values, z_values):
     return figure_heatmap
 
 def visualize_io_pattern(source_file_name, logs_kind):
-    shared_html_graphs=open("TEST_DASHBOARDS.html", "w")
-    shared_html_graphs.write("<html><head></head><body>"+"\n")
-
     # NOTE: Heatmap's data
     heatmap_time_values = []
     heatmap_latency_values = []
@@ -76,20 +73,25 @@ def visualize_io_pattern(source_file_name, logs_kind):
     latency_heatmap.update_layout(
         title=heatmap_shared_title,
         yaxis_nticks=40,
-        xaxis_title="Time, s",
-        yaxis_title="Latency, ms")
+        xaxis_title="I/O Start time (s)",
+        yaxis_title="Latency, ms",
+        xaxis_tickformat=".4f")
 
     bytes_heatmap = get_heatmap_figure(heatmap_x_values, heatmap_z_values, heatmap_y_values)
     bytes_heatmap.update_layout(
         title=heatmap_shared_title,
-        xaxis_title="Time, s",
+        xaxis_title="I/O Start time (s)",
         xaxis_nticks=40,
         yaxis_title="Bytes",
-        tickangle=45)
+        xaxis_tickformat=".4f")
 
 
     print("Exporting heatmap into file..")
     try:
+        # NOTE: Generating shared HTML for the heatmaps
+        shared_html_graphs = open("TEST_DASHBOARDS.html", "w")
+        shared_html_graphs.write("<html><head></head><body>" + "\n")
+
         latency_heatmap.write_html(file="latency_heatmap.html", auto_open=False)
         bytes_heatmap.write_html(file="bytes_heatmap.html", auto_open=False)
         shared_html_graphs.write("  <object data=\""+"latency_heatmap.html"+"\" width=\"1000\" height=\"500\"></object>"+"\n")
