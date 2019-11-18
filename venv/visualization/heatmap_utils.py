@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 
 import sys, os
+import subprocess
 ## NOTE: Library for heat map generation
 import plotly.graph_objects as go
 
@@ -55,7 +56,6 @@ def visualize_io_pattern(source_file_name):
         hovertext.append(list())
         # NOTE: Getting the process name by its ID
         print(f"heatmap_pid_values[yi]: {heatmap_pid_values[yi]}")
-
         cpu = "unknown"
         virtualMemorySize = "unknown"
         ps_cmd_raw_result = []

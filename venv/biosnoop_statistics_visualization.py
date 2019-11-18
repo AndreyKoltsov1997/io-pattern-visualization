@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
 
-import subprocess
 import sys, os, argparse
 
 sys.path.append(os.pardir)
