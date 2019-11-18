@@ -18,7 +18,7 @@ def get_heatmap_figure(x_value, y_values, z_values):
         y=y_values))
     return figure_heatmap
 
-def visualize_io_pattern(source_file_name):
+def visualize_io_pattern(source_file_name, logs_kind):
 
     # NOTE: Heatmap's data
     heatmap_time_values = []
@@ -67,15 +67,16 @@ def visualize_io_pattern(source_file_name):
     #     hoverinfo='text',
     #     text=hovertext))
     latency_heatmap = get_heatmap_figure(heatmap_x_values, heatmap_y_values, heatmap_z_values)
+    heatmap_shared_title = f'iosnoop statistics for {logs_kind}'
     latency_heatmap.update_layout(
-        title='iosnoop statistics',
+        title=heatmap_shared_title,
         yaxis_nticks=40,
         xaxis_title="Time, s",
         yaxis_title="Latency, ms")
 
     bytes_heatmap = get_heatmap_figure(heatmap_x_values, heatmap_z_values, heatmap_y_values)
     bytes_heatmap.update_layout(
-        title='iosnoop statistics',
+        title=heatmap_shared_title,
         xaxis_title="Time, s",
         xaxis_nticks=40,
         yaxis_title="Bytes")
@@ -91,8 +92,6 @@ def visualize_io_pattern(source_file_name):
     except Exception as e:
         print(e)
         sys.exit(-1)
-
-
 
 def visualize_io_pattern_with_captured_values(bcc_tools_location, amount_of_logs_to_collect):
 
