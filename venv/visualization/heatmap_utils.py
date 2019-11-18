@@ -21,9 +21,7 @@ def visualize_io_pattern(source_file_name):
 
     minimal_required_amount_of_data = 7
 
-    IOSNOOP_LOG_FILE_NAME_MOCK = source_file_name
-    iosnoop_logs_file = open(IOSNOOP_LOG_FILE_NAME_MOCK)
-    lines = []
+    iosnoop_logs_file = open(source_file_name)
     current_line = iosnoop_logs_file.readline()
 
     while (current_line):
@@ -69,7 +67,7 @@ def visualize_io_pattern(source_file_name):
                 'Process name: {} <br />Time: {}<br />Latency: {}<br />Bytes: {} <br /> PID: {}, CPU: {} <br /> Virtual Memory Size: {} <br /> Resident Set Size: {}'.format(
                     target_process_name, xx, yy, heatmap_z_labels[0][yi], heatmap_pid_values[yi], "unknown",
                     "unknown", "unknown"))
-
+    print("Launch map drawing..")
     io_pattern_heat_map = go.Figure(data=go.Heatmap(
         z=heatmap_z_values,
         x=heatmap_x_values,
@@ -79,10 +77,13 @@ def visualize_io_pattern(source_file_name):
 
     io_pattern_heat_map.update_layout(
         title='BIOSNOOP statistics',
-        xaxis_nticks=10,
+        # xaxis_nticks=10,
         xaxis_title="Time, s",
         yaxis_title="Latency, ms")
 
+    print("Exporting heatmap into file..")
+    io_pattern_heat_map.write_image("test_heatmap.png")
+    print("Executing heatmap pop up..")
     io_pattern_heat_map.show()
 
 
