@@ -32,6 +32,9 @@ def visualize_io_pattern(amount_of_logs_to_collect, source_file_name):
             current_line = iosnoop_logs_file.readline()
             continue
         # TODO: Replace hard-coded index with string pattern (?)
+        if (polling_data_values[0] == "STARTs"):
+            current_line = iosnoop_logs_file.readline()
+            continue
 
         heatmap_time_values.append(polling_data_values[TIME_VALUE_INDEX])
         heatmap_pid_values.append(polling_data_values[PID_VALUE_INDEX])
