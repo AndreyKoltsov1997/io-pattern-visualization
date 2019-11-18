@@ -9,7 +9,8 @@ from visualization.heatmap_utils import *
 
 def get_available_options() -> argparse.Namespace:
     parser_instance = argparse.ArgumentParser(description="Vizualising IO pattern using data gathered via BCC tools.")
-    parser_instance.add_argument('-f',  '--filepath', action='store', metavar=('FILEPATH'), nargs=1, help="Path to file that contains logs gathered via '$ ./iosnoop -s' execution.")
+    parser_instance.add_argument('-f',  '--filepath', action='store', metavar=('FILEPATH'), nargs=1,
+                                 help="Path to file that contains logs gathered via '$ ./iosnoop -s' execution.")
     parser_instance.add_argument('-e', '--execute', action="store", metavar=('PATH', 'AMOUNT'), nargs=2,
                                  help="vizualize certain amount of iosnoop's output logs.")
     general_group = parser_instance.add_argument_group()

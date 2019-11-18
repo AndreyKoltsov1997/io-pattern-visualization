@@ -4,6 +4,7 @@ import sys, os
 import subprocess
 ## NOTE: Library for heat map generation
 import plotly.graph_objects as go
+import re
 
 from utils.constants import *
 
@@ -34,7 +35,11 @@ def visualize_io_pattern(source_file_name):
             current_line = iosnoop_logs_file.readline()
             continue
         # TODO: Replace hard-coded index with string pattern (?)
-        if (polling_data_values[0] == "STARTs"):
+
+        captured_time = polling_data_values[0]
+        is_floating_point = (re.match(r'^-?\d+(?:\.\d+)?$', captured_time) is not None)
+        is_integer = captured_time.isdigit()
+        if (not is_floating_point and not is_integer):
             current_line = iosnoop_logs_file.readline()
             continue
 
