@@ -40,8 +40,7 @@ def visualize_io_pattern(amount_of_logs_to_collect, source_file_name):
         heatmap_pid_values.append(polling_data_values[PID_VALUE_INDEX])
         heatmap_bytes_values.append(polling_data_values[BYTES_VALUE_INDEX])
         heatmap_latency_values.append(polling_data_values[LATENCY_VAUE_INDEX])
-        # time.sleep(0.2)
-        current_line =  iosnoop_logs_file.readline()
+        current_line = iosnoop_logs_file.readline()
 
     # NOTE: Creating the heat map
     heatmap_x_values = heatmap_time_values
