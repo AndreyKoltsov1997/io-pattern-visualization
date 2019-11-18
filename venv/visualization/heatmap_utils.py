@@ -4,6 +4,7 @@ import sys, os
 import subprocess
 ## NOTE: Library for heat map generation
 import plotly.graph_objects as go
+from plotly.subplots import make_subplots
 
 from utils.constants import *
 from utils.math_utils import *
@@ -19,6 +20,8 @@ def get_heatmap_figure(x_value, y_values, z_values):
     return figure_heatmap
 
 def visualize_io_pattern(source_file_name, logs_kind):
+    shared_html_graphs=open("TEST_DASHBOARDS.html", "w")
+    shared_html_graphs.write("<html><head></head><body>"+"\n")
 
     # NOTE: Heatmap's data
     heatmap_time_values = []
@@ -66,6 +69,8 @@ def visualize_io_pattern(source_file_name, logs_kind):
     #     y=heatmap_y_values,
     #     hoverinfo='text',
     #     text=hovertext))
+
+
     latency_heatmap = get_heatmap_figure(heatmap_x_values, heatmap_y_values, heatmap_z_values)
     heatmap_shared_title = f'iosnoop statistics for {logs_kind}'
     latency_heatmap.update_layout(
@@ -79,13 +84,17 @@ def visualize_io_pattern(source_file_name, logs_kind):
         title=heatmap_shared_title,
         xaxis_title="Time, s",
         xaxis_nticks=40,
-        yaxis_title="Bytes")
+        yaxis_title="Bytes",
+        tickangle=45)
 
 
     print("Exporting heatmap into file..")
     try:
         latency_heatmap.write_html(file="latency_heatmap.html", auto_open=False)
         bytes_heatmap.write_html(file="bytes_heatmap.html", auto_open=False)
+        shared_html_graphs.write("  <object data=\""+"latency_heatmap.html"+"\" width=\"1000\" height=\"500\"></object>"+"\n")
+        shared_html_graphs.write("  <object data=\""+"bytes_heatmap.html"+"\" width=\"1000\" height=\"500\"></object>"+"\n")
+
 
         # latency_heatmap.write_image("latency_heatmap.svg")
         # bytes_heatmap.write_image("bytes_heatmap.svg")
