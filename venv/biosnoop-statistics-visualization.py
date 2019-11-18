@@ -55,7 +55,7 @@ def visualize_io_pattern(amount_of_logs_to_collect, source_file_name):
         # NOTE: Getting the process name by its ID
         print(f"heatmap_pid_values[yi]: {heatmap_pid_values[yi]}")
         process_name_fetch_result_raw = subprocess.run(
-            ['ps -p {proc_id} -o comm='.format(proc_id=heatmap_pid_values[yi])], shell=True, stdout=subprocess.PIPE)
+            ['ls'.format(proc_id=heatmap_pid_values[yi])], shell=True, stdout=subprocess.PIPE)
         process_name_fetch_result = process_name_fetch_result_raw.stdout.decode("utf-8").split()
         residentSetSize = "unknown"
         processName = "unknown"
@@ -68,7 +68,7 @@ def visualize_io_pattern(amount_of_logs_to_collect, source_file_name):
             if (process_name_fetch_result[0] != "PID"):
                 target_process_name = process_name_fetch_result[0]
                 ps_cmd_result = subprocess.run(
-                    ['ps aux | grep {process_name}'.format(process_name=target_process_name)],
+                    ['ls'.format(process_name=target_process_name)],
                     shell=True,
                     stdout=subprocess.PIPE)
                 ps_cmd_raw_result = ps_cmd_result.stdout.decode("utf-8").split()
@@ -78,7 +78,7 @@ def visualize_io_pattern(amount_of_logs_to_collect, source_file_name):
         if (len(ps_cmd_raw_result) > 0):
             # NOTE: Retrieving the info about the process
             ps_cmd_result = subprocess.run(
-                ['ps aux | grep {process_name}'.format(process_name=target_process_name)], shell=True,
+                ['ls'.format(process_name=target_process_name)], shell=True,
                 stdout=subprocess.PIPE)
             ps_cmd_raw_result = ps_cmd_result.stdout.decode("utf-8").split()
             if (len(ps_cmd_raw_result) == 0):
