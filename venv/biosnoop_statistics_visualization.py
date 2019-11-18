@@ -9,10 +9,10 @@ from visualization.heatmap_utils import *
 
 def get_available_options() -> argparse.Namespace:
     parser_instance = argparse.ArgumentParser(description="Vizualising IO pattern using data gathered via BCC tools.")
-    parser_instance.add_argument('-f',  '--filepath', action='store', metavar=('FILEPATH'), nargs=1,
+    parser_instance.add_argument('-f',  '--filepath', action='store', metavar=('FILEPATH', 'KIND'), nargs=2,
                                  help="Path to file that contains logs gathered via '$ ./iosnoop -s' execution.")
-    parser_instance.add_argument('-e', '--execute', action="store", metavar=('PATH', 'AMOUNT'), nargs=2,
-                                 help="vizualize certain amount of iosnoop's output logs.")
+    parser_instance.add_argument('-e', '--execute', action="store", metavar=('PATH', 'AMOUNT', 'KIND'), nargs=3,
+                                 help="Visualize certain amount of iosnoop's output logs.")
     general_group = parser_instance.add_argument_group()
     return parser_instance.parse_args()
 
@@ -21,7 +21,8 @@ if __name__ == '__main__':
     try:
         if available_options.filepath:
             logs_file_path = available_options.filepath[0]
-            visualize_io_pattern(logs_file_path)
+            logs_kind = available_options.filepath[1]
+            visualize_io_pattern(logs_file_path, logs_kind)
         elif available_options.execute:
             iosnoop_script_path = available_options.execute[0]
             required_amount_of_logs_to_capture = available_options.execute[1]
