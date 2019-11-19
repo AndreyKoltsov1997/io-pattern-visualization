@@ -85,24 +85,39 @@ def visualize_io_pattern(source_file_name, logs_kind):
         yaxis_title="Bytes",
         xaxis_tickformat=".4f")
 
+    heatmaps = [bytes_heatmap, latency_heatmap]
+    result_dashboard_filename = "result.html"
+    merge_figures_into_single_html(result_dashboard_filename, heatmaps)
 
-    print("Exporting heatmap into file..")
-    try:
-        # NOTE: Generating shared HTML for the heatmaps
-        shared_html_graphs = open("TEST_DASHBOARDS.html", "w")
-        shared_html_graphs.write("<html><head></head><body>" + "\n")
+    #
+    # print("Exporting heatmap into file..")
+    # try:
+    #     # NOTE: Generating shared HTML for the heatmaps
+    #     shared_html_graphs = open("TEST_DASHBOARDS.html", "w")
+    #     shared_html_graphs.write("<html><head></head><body>" + "\n")
+    #
+    #     latency_heatmap.write_html(file="latency_heatmap.html", auto_open=False)
+    #     bytes_heatmap.write_html(file="bytes_heatmap.html", auto_open=False)
+    #     shared_html_graphs.write("  <object data=\""+"latency_heatmap.html"+"\" width=\"1000\" height=\"500\"></object>"+"\n")
+    #     shared_html_graphs.write("  <object data=\""+"bytes_heatmap.html"+"\" width=\"1000\" height=\"500\"></object>"+"\n")
+    #
+    #
+    #     # latency_heatmap.write_image("latency_heatmap.svg")
+    #     # bytes_heatmap.write_image("bytes_heatmap.svg")
+    # except Exception as e:
+    #     print(e)
+    #     sys.exit(-1)
 
-        latency_heatmap.write_html(file="latency_heatmap.html", auto_open=False)
-        bytes_heatmap.write_html(file="bytes_heatmap.html", auto_open=False)
-        shared_html_graphs.write("  <object data=\""+"latency_heatmap.html"+"\" width=\"1000\" height=\"500\"></object>"+"\n")
-        shared_html_graphs.write("  <object data=\""+"bytes_heatmap.html"+"\" width=\"1000\" height=\"500\"></object>"+"\n")
+def merge_figures_into_single_html(result_file_name, figures = []):
+    shared_html_graphs = open(f"{result_file_name}.html", "w")
+    shared_html_graphs.write("<html><head></head><body>" + "\n")
+    for index, figure in enumerate(figures):
+        tmp_figure_html_filename = f"figure-{index}.html"
+        figure.write_html(file=tmp_figure_html_filename, auto_open=False)
+        shared_html_graphs.write("  <object data=\"" + tmp_figure_html_filename + "\" width=\"1000\" height=\"500\"></object>" + "\n")
+        os.remove(tmp_figure_html_filename)
+    return result_file_name
 
-
-        # latency_heatmap.write_image("latency_heatmap.svg")
-        # bytes_heatmap.write_image("bytes_heatmap.svg")
-    except Exception as e:
-        print(e)
-        sys.exit(-1)
 
 def visualize_io_pattern_with_captured_values(bcc_tools_location, amount_of_logs_to_collect):
 
