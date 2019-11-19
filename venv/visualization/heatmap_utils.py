@@ -67,7 +67,6 @@ def visualize_io_pattern(source_file_name, logs_kind):
     heatmap_x_values = heatmap_time_values
     heatmap_y_values = heatmap_latency_values
     heatmap_z_values = heatmap_bytes_values
-    heatmap_z_labels = [heatmap_bytes_values]
 
     latency_heatmap = get_heatmap_figure(heatmap_x_values, heatmap_y_values, heatmap_z_values)
     heatmap_shared_title = f'iosnoop statistics for {logs_kind}'
