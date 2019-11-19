@@ -30,8 +30,7 @@ def get_hover_text_labels(x_values, y_values):
             hovertext[-1].append('Process name: test')
     return hovertext
 
-
-def visualize_io_pattern(source_file_name, logs_kind):
+def get_core_charts_from_file(filename, kind) -> list:
     # NOTE: Heatmap's data
     heatmap_time_values = []
     heatmap_latency_values = []
@@ -39,20 +38,17 @@ def visualize_io_pattern(source_file_name, logs_kind):
     heatmap_pid_values = []
 
     minimal_required_amount_of_data = 7
-
-    iosnoop_logs_file = open(source_file_name)
+    iosnoop_logs_file = open(filename)
     current_line = iosnoop_logs_file.readline()
 
     while (current_line):
         polling_data_values = current_line.split()
-
         if (len(polling_data_values) < minimal_required_amount_of_data):
             # NOTE: Preventing parsing a single PID (sometimes, the polling ...
             # ... captures this kind of output.
             current_line = iosnoop_logs_file.readline()
             continue
         # TODO: Replace hard-coded index with string pattern (?)
-
         captured_time = polling_data_values[0]
         if (not is_numberic_value(captured_time)):
             current_line = iosnoop_logs_file.readline()
@@ -70,7 +66,7 @@ def visualize_io_pattern(source_file_name, logs_kind):
     heatmap_z_values = heatmap_bytes_values
 
     latency_heatmap = get_heatmap_figure(heatmap_x_values, heatmap_y_values, heatmap_z_values)
-    heatmap_shared_title = f'iosnoop statistics for {logs_kind}'
+    heatmap_shared_title = f'iosnoop statistics for {kind}'
     latency_heatmap.update_layout(
         title=heatmap_shared_title,
         yaxis_nticks=40,
@@ -86,28 +82,20 @@ def visualize_io_pattern(source_file_name, logs_kind):
         yaxis_title="Bytes",
         xaxis_tickformat=".4f")
 
-    heatmaps = [bytes_heatmap, latency_heatmap]
+    return  [bytes_heatmap, latency_heatmap]
+
+def visualize_io_pattern(source_file_name, logs_kind = ""):
+    if not os.path.exists(source_file_name):
+        raise Exception("Unable to get visualization data from file {source_file_name} since it doesn't exist.")
+
+    if logs_kind == "":
+        # NOTE: Use file name as a default logs find.
+        logs_kind = source_file_name
+
+    heatmaps = get_core_charts_from_file(source_file_name, source_file_name)
     result_dashboard_filename = "result.html"
     merge_figures_into_single_html(result_dashboard_filename, heatmaps)
 
-    #
-    # print("Exporting heatmap into file..")
-    # try:
-    #     # NOTE: Generating shared HTML for the heatmaps
-    #     shared_html_graphs = open("TEST_DASHBOARDS.html", "w")
-    #     shared_html_graphs.write("<html><head></head><body>" + "\n")
-    #
-    #     latency_heatmap.write_html(file="latency_heatmap.html", auto_open=False)
-    #     bytes_heatmap.write_html(file="bytes_heatmap.html", auto_open=False)
-    #     shared_html_graphs.write("  <object data=\""+"latency_heatmap.html"+"\" width=\"1000\" height=\"500\"></object>"+"\n")
-    #     shared_html_graphs.write("  <object data=\""+"bytes_heatmap.html"+"\" width=\"1000\" height=\"500\"></object>"+"\n")
-    #
-    #
-    #     # latency_heatmap.write_image("latency_heatmap.svg")
-    #     # bytes_heatmap.write_image("bytes_heatmap.svg")
-    # except Exception as e:
-    #     print(e)
-    #     sys.exit(-1)
 
 def merge_figures_into_single_html(result_file_name, figures = []):
     figures_directory_name = "figures"
