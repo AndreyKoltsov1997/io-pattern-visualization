@@ -30,7 +30,8 @@ def get_hover_text_labels(x_values, y_values):
             hovertext[-1].append('Process name: test')
     return hovertext
 
-def get_core_charts_from_file(filename, kind) -> list:
+def get_core_charts_from_file(filename, kind):
+    print(f"Parsing file {filename}...")
     # NOTE: Heatmap's data
     heatmap_time_values = []
     heatmap_latency_values = []
@@ -82,7 +83,7 @@ def get_core_charts_from_file(filename, kind) -> list:
         yaxis_title="Bytes",
         xaxis_tickformat=".4f")
 
-    return  [bytes_heatmap, latency_heatmap]
+    return [bytes_heatmap, latency_heatmap]
 
 def visualize_io_pattern(source_file_name, logs_kind = ""):
     if not os.path.exists(source_file_name):
@@ -96,6 +97,13 @@ def visualize_io_pattern(source_file_name, logs_kind = ""):
     result_dashboard_filename = "result.html"
     merge_figures_into_single_html(result_dashboard_filename, heatmaps)
 
+def generete_html_for_figure(figure, html_file_name):
+    try:
+        figure.write_html(file=html_file_name, auto_open=False)
+    except Exception as e:
+        print(f"Unable to save figure as an HTML into file {html_file_name}. Details: {e}")
+        return ""
+    return html_file_name
 
 def merge_figures_into_single_html(result_file_name, figures = []):
     figures_directory_name = "figures"
@@ -114,6 +122,15 @@ def merge_figures_into_single_html(result_file_name, figures = []):
         shared_html_graphs.write("  <object data=\"" + tmp_figure_html_filename + "\" width=\"1000\" height=\"500\"></object>" + "\n")
     return result_file_name
 
+def merge_html_files(mering_html_filenames, result_file_name):
+    result_file_extension = ".html"
+
+    shared_html_graphs = open(f"{result_file_name}{result_file_extension}", "w")
+    shared_html_graphs.write("<html><head></head><body>" + "\n")
+    for merging_file in mering_html_filenames:
+        if not os.path.exists(merging_file):
+            raise Exception(f"Unable to merge {merging_file} since it doesn't exist.")
+        shared_html_graphs.write("  <object data=\"" + merging_file + "\" width=\"1000\" height=\"500\"></object>" + "\n")
 
 def visualize_io_pattern_with_captured_values(bcc_tools_location, amount_of_logs_to_collect):
 
