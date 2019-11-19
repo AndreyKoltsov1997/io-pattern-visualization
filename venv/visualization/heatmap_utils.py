@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 
 import sys, os
+import re
 import subprocess
 ## NOTE: Library for heat map generation
 import plotly.graph_objects as go
@@ -109,13 +110,20 @@ def visualize_io_pattern(source_file_name, logs_kind):
     #     sys.exit(-1)
 
 def merge_figures_into_single_html(result_file_name, figures = []):
-    shared_html_graphs = open(f"{result_file_name}.html", "w")
+    figures_directory_name = "figures"
+    if not os.path.exists(figures_directory_name):
+        os.mkdir(figures_directory_name)
+
+    result_file_extension = ".html"
+    if result_file_name.endswith(result_file_extension):
+        result_file_name = result_file_name[:-1*(len(result_file_extension))]
+    shared_html_graphs = open(f"{figures_directory_name}/{result_file_name}{result_file_extension}", "w")
     shared_html_graphs.write("<html><head></head><body>" + "\n")
     for index, figure in enumerate(figures):
-        tmp_figure_html_filename = f"figure-{index}.html"
-        figure.write_html(file=tmp_figure_html_filename, auto_open=False)
+        tmp_figure_html_filename = f"figure-{index}{result_file_extension}"
+        tmp_file_path_with_directory = f"{figures_directory_name}/{tmp_figure_html_filename}"
+        figure.write_html(file=tmp_file_path_with_directory, auto_open=False)
         shared_html_graphs.write("  <object data=\"" + tmp_figure_html_filename + "\" width=\"1000\" height=\"500\"></object>" + "\n")
-        os.remove(tmp_figure_html_filename)
     return result_file_name
 
 
