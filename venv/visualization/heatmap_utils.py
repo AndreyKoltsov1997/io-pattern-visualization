@@ -74,7 +74,7 @@ def get_core_charts_from_file(filename, kind):
         title=heatmap_shared_title,
         yaxis_nticks=1,
         xaxis_title="I/O Start time (s)",
-        yaxis_title="Latency, ms",
+        yaxis_title="I/O Latency, ms",
         xaxis_tickformat=".0f")
 
     bytes_heatmap = get_heatmap_figure(heatmap_x_values, heatmap_z_values, heatmap_y_values)
@@ -82,7 +82,7 @@ def get_core_charts_from_file(filename, kind):
         title=heatmap_shared_title,
         xaxis_title="I/O Start time (s)",
         xaxis_nticks=40,
-        yaxis_title="Bytes",
+        yaxis_title="Event Size, Bytes",
         xaxis_tickformat=".0f")
 
     latency_heatmap.update_xaxes(range=[0, 100], rangemode="tozero")
