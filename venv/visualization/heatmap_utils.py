@@ -42,6 +42,7 @@ def get_core_charts_from_file(filename, kind):
     iosnoop_logs_file = open(filename)
     current_line = iosnoop_logs_file.readline()
 
+
     while (current_line):
         polling_data_values = current_line.split()
         if (len(polling_data_values) < minimal_required_amount_of_data):
@@ -50,38 +51,43 @@ def get_core_charts_from_file(filename, kind):
             current_line = iosnoop_logs_file.readline()
             continue
         # TODO: Replace hard-coded index with string pattern (?)
-        captured_time = polling_data_values[0]
-        if (not is_numberic_value(captured_time)):
-            current_line = iosnoop_logs_file.readline()
-            continue
+        time_value = int(float(polling_data_values[IOSNOOP_PARSING.TIME_VALUE_INDEX]))
+        print(f"Found time value: {time_value}")
 
-        heatmap_time_values.append(polling_data_values[IOSNOOP_PARSING.TIME_VALUE_INDEX])
-        heatmap_pid_values.append(polling_data_values[IOSNOOP_PARSING.PID_VALUE_INDEX])
-        heatmap_bytes_values.append(polling_data_values[IOSNOOP_PARSING.BYTES_VALUE_INDEX])
-        heatmap_latency_values.append(polling_data_values[IOSNOOP_PARSING.LATENCY_VALUE_INDEX])
+        heatmap_time_values.append(time_value)
+
+        heatmap_pid_values.append(int(float(polling_data_values[IOSNOOP_PARSING.PID_VALUE_INDEX])))
+        heatmap_bytes_values.append(float(polling_data_values[IOSNOOP_PARSING.BYTES_VALUE_INDEX]))
+        heatmap_latency_values.append(float(polling_data_values[IOSNOOP_PARSING.LATENCY_VALUE_INDEX]))
         current_line = iosnoop_logs_file.readline()
 
     # NOTE: Creating the heat map
     heatmap_x_values = heatmap_time_values
+
     heatmap_y_values = heatmap_latency_values
     heatmap_z_values = heatmap_bytes_values
+
 
     latency_heatmap = get_heatmap_figure(heatmap_x_values, heatmap_y_values, heatmap_z_values)
     heatmap_shared_title = f'iosnoop statistics for {kind}'
     latency_heatmap.update_layout(
         title=heatmap_shared_title,
-        yaxis_nticks=40,
+        yaxis_nticks=1,
         xaxis_title="I/O Start time (s)",
-        yaxis_title="Latency, ms",
-        xaxis_tickformat=".4f")
+        yaxis_title="I/O Latency, ms",
+        xaxis_tickformat=".0f")
 
     bytes_heatmap = get_heatmap_figure(heatmap_x_values, heatmap_z_values, heatmap_y_values)
     bytes_heatmap.update_layout(
         title=heatmap_shared_title,
         xaxis_title="I/O Start time (s)",
         xaxis_nticks=40,
-        yaxis_title="Bytes",
-        xaxis_tickformat=".4f")
+        yaxis_title="Event Size, Bytes",
+        xaxis_tickformat=".0f")
+
+    latency_heatmap.update_xaxes(range=[0, 100], rangemode="tozero")
+    bytes_heatmap.update_xaxes(range=[0, 100], rangemode="tozero")
+
 
     return [bytes_heatmap, latency_heatmap]
 
