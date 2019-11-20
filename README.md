@@ -21,6 +21,7 @@ To get actual list of all options run: `./utils/pks_manager.py -h`
                                  
 | Option | Short flag | Params | Description |
 | --- | --- | --- | --- |
+| --help | -h | | Get available options. |
 | --filepath | -f | [FILEPATH] [KIND] | Visualize data from given file. [FILEPATH] - Path to file, [KIND] - string description of the data.  |
 | --execute | -e | [PATH] [AMOUNT] [KIND} | Visualize data based on the captured output of iosnoop. [PATH] - path to IOSNOOP executable, [AMOUNT] - amount of logs to process, [KIND] - string description of the data. |
 | --load | -l | [FOLDERPATH] | Visualize data from every file within given folder. [FOLDERPATH] - path to folder that contains files with logs. |
